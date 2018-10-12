@@ -1,0 +1,3 @@
+[submodule "CombOptWS2018"]
+	path = CombOptWS2018
+	url = git@github.com:DanielWochnik/CombOptWS2018.git
