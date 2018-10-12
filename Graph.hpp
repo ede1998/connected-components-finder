@@ -12,6 +12,7 @@
 #include <vector>
 #include <utility>
 #include <cstddef>
+#include <optional>
 
 using vID = unsigned int;
 using eID = unsigned int;
@@ -29,6 +30,8 @@ public:
    const std::set<Edge*>& getIncidentEdges();
    unsigned int getDegree();
    std::set<Vertex*> getNeighbourhood();
+   Edge* getIncidentEdge(const Vertex& other);
+   vID getID();
 private:
     explicit Vertex(const vID id, Environment& g);
     bool addEdge(Edge& e);
@@ -46,6 +49,7 @@ public:
    Vertex& getAdjacentVertex(const Vertex& other);
    Vertex& getFirst();
    Vertex& getSecond();
+   eID getID();
 private:
     explicit Edge(const eID id, Vertex& first, Vertex& second, Environment& g);
 
@@ -69,8 +73,11 @@ public:
     Edge& addEdge(Vertex& v1, Vertex& v2);
     Vertex& addVertex();
 
-    unsigned int getEdgeSize();
-    unsigned int getVertexSize();
+    unsigned int getEdgeSize() const;
+    unsigned int getVertexSize() const;
+
+    Vertex& getVertex(size_t index);
+    Edge& getEdge(size_t index);
 private:
     std::vector<Vertex> _vertices;
     std::vector<Edge> _edges;

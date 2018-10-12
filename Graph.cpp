@@ -17,11 +17,13 @@ Environment::Environment(const char* filename)
     std::ifstream fs(filename);
     assert(fs.good());
 
+    fs.unsetf(std::ios_base::skipws);
     const eID numEdges = std::count(std::istream_iterator<char>(fs),
                                     std::istream_iterator<char>(),
                                     ' ');
+    fs.setf(std::ios_base::skipws);
     fs.clear();
-    fs.seekg(0, fs.beg);
+    fs.seekg(0, std::ios_base::beg);
     // neccessary to prevent _edges from reallocating which would invalidate
     // all references in the vertex classes
     _edges.reserve(numEdges);
@@ -63,7 +65,7 @@ unsigned int Vertex::getDegree()
 std::set<Vertex*> Vertex::getNeighbourhood()
 {
     std::set<Vertex*> nbh;
-    for (auto e : getIncidentEdges())
+    for (Edge* e : getIncidentEdges())
     {
         Vertex& v = e->getAdjacentVertex(*this);
         nbh.insert(&v);
@@ -96,6 +98,11 @@ Vertex& Edge::getSecond()
     return *_endpoint.second;
 }
 
+eID Edge::getID()
+{
+    return _id;
+}
+
 Edge::Edge(const eID id, Vertex& first, Vertex& second, Environment& env) :
         _id(id), _env(env)
 {
@@ -124,17 +131,44 @@ Vertex& Environment::addVertex()
     return _vertices.back();
 }
 
-unsigned int Environment::getEdgeSize()
+unsigned int Environment::getEdgeSize() const
 {
     return _edges.size();
 }
 
-unsigned int Environment::getVertexSize()
+unsigned int Environment::getVertexSize() const
 {
     return _vertices.size();
+}
+
+Edge* Vertex::getIncidentEdge(const Vertex& other)
+{
+    for (Edge* e: _edges)
+    {
+        if (e->getAdjacentVertex(*this) == other)
+        {
+            return e;
+        }
+    }
+    return nullptr;
+}
+
+vID Vertex::getID()
+{
+    return _id;
 }
 
 bool Vertex::addEdge(Edge& e)
 {
     return _edges.emplace(&e).second;
+}
+
+Vertex& Environment::getVertex(size_t index)
+{
+    return _vertices.at(index);
+}
+
+Edge& Environment::getEdge(size_t index)
+{
+    return _edges.at(index);
 }

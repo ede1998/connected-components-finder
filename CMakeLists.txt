@@ -12,4 +12,4 @@ add_library(graph STATIC Graph.cpp)
 
 add_executable(connected-components-finder connected-components-finder.cpp)
 
-target_link_libraries(connected-components-finder wochnik-graph)
+target_link_libraries(connected-components-finder graph)
