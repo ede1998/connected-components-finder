@@ -10,6 +10,8 @@
 
 #include <set>
 
+#include "Direction.hpp"
+
 using vID = unsigned int;
 
 class Edge;
@@ -20,10 +22,10 @@ class Vertex
 {
     friend class Environment;
 public:
-   const std::set<Edge*>& getIncidentEdges() const;
-   unsigned int getDegree();
-   std::set<Vertex*> getNeighbourhood() const;
-   Edge* getIncidentEdge(const Vertex& other) const;
+   std::set<Edge*> getIncidentEdges(const Direction d = DIR_BOTH) const;
+   unsigned int getDegree(const Direction d = DIR_BOTH);
+   std::set<Vertex*> getNeighbourhood(const Direction d = DIR_BOTH) const;
+   Edge* getIncidentEdge(const Vertex& other, const Direction d = DIR_BOTH) const;
    vID getID() const;
    Environment& getEnv() const;
 private:
