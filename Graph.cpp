@@ -7,168 +7,54 @@
 
 #include "Graph.hpp"
 
-#include <fstream>
-#include <cassert>
-#include <algorithm>
-#include <iterator>
-
-Environment::Environment(const char* filename)
-{
-    std::ifstream fs(filename);
-    assert(fs.good());
-
-    fs.unsetf(std::ios_base::skipws);
-    const eID numEdges = std::count(std::istream_iterator<char>(fs),
-                                    std::istream_iterator<char>(),
-                                    ' ');
-    fs.setf(std::ios_base::skipws);
-    fs.clear();
-    fs.seekg(0, std::ios_base::beg);
-    // neccessary to prevent _edges from reallocating which would invalidate
-    // all references in the vertex classes
-    _edges.reserve(numEdges);
-
-    vID numVertices;
-    fs >> numVertices;
-
-    // neccessary to prevent _vertices from reallocating which would invalidate
-    // all references in the vertex classes and edges classes
-    _vertices.reserve(numVertices);
-    // Add vertices and save temporarily
-    for (vID i = 0; i < numVertices; ++i)
-    {
-        addVertex();
-    }
-
-    unsigned int left, right;
-    while (fs >> left >> right)
-    {
-        addEdge(_vertices[left], _vertices[right]);
-    }
-}
-
-bool Vertex::operator ==(const Vertex& other)
-{
-    return this == &other;
-}
-
-const std::set<Edge*>& Vertex::getIncidentEdges()
-{
-    return _edges;
-}
-
-unsigned int Vertex::getDegree()
-{
-    return _edges.size();
-}
-
-std::set<Vertex*> Vertex::getNeighbourhood()
-{
-    std::set<Vertex*> nbh;
-    for (Edge* e : getIncidentEdges())
-    {
-        Vertex& v = e->getAdjacentVertex(*this);
-        nbh.insert(&v);
-    }
-    return nbh;
-}
-
-Vertex::Vertex(const vID id, Environment& env) :
-        _id(id), _env(env)
+Graph::Graph(Environment& env)
+: _env(env)
 {
 }
 
-bool Edge::operator ==(const Edge& other)
+bool Graph::addVertex(Vertex& v)
 {
-    return this == &other;
+    return _vertices.emplace(&v).second;
 }
 
-Vertex& Edge::getAdjacentVertex(const Vertex& other)
-{
-    return (*_endpoint.first == other) ? *_endpoint.second : *_endpoint.first;
-}
-
-Vertex& Edge::getFirst()
-{
-    return *_endpoint.first;
-}
-
-Vertex& Edge::getSecond()
-{
-    return *_endpoint.second;
-}
-
-eID Edge::getID()
-{
-    return _id;
-}
-
-Edge::Edge(const eID id, Vertex& first, Vertex& second, Environment& env) :
-        _id(id), _env(env)
-{
-    _endpoint.first = &first;
-    _endpoint.second = &second;
-}
-
-Edge& Environment::addEdge(Vertex& v1, Vertex& v2)
-{
-    assert(!_vertices.empty());
-    assert(_vertices.data() <= &v1 && &v1 < _vertices.data() + _vertices.size());
-    assert(_vertices.data() <= &v2 && &v2 < _vertices.data() + _vertices.size());
-
-    _edges.push_back(Edge(_edges.size(), v1, v2, *this));
-
-    Edge& e = _edges.back();
-    v1.addEdge(e);
-    v2.addEdge(e);
-
-    return e;
-}
-
-Vertex& Environment::addVertex()
-{
-    _vertices.push_back(Vertex(_vertices.size(), *this));
-    return _vertices.back();
-}
-
-unsigned int Environment::getEdgeSize() const
-{
-    return _edges.size();
-}
-
-unsigned int Environment::getVertexSize() const
-{
-    return _vertices.size();
-}
-
-Edge* Vertex::getIncidentEdge(const Vertex& other)
-{
-    for (Edge* e: _edges)
-    {
-        if (e->getAdjacentVertex(*this) == other)
-        {
-            return e;
-        }
-    }
-    return nullptr;
-}
-
-vID Vertex::getID()
-{
-    return _id;
-}
-
-bool Vertex::addEdge(Edge& e)
+bool Graph::addEdge(Edge& e)
 {
     return _edges.emplace(&e).second;
 }
 
-Vertex& Environment::getVertex(size_t index)
+bool Graph::removeVertex(Vertex& v)
 {
-    return _vertices.at(index);
+    auto iter = _vertices.find(&v);
+    if (iter != _vertices.end())
+    {
+        _vertices.erase(iter);
+        return true;
+    }
+    return false;
 }
 
-Edge& Environment::getEdge(size_t index)
+bool Graph::removeEdge(Edge& e)
 {
-    return _edges.at(index);
+    auto iter = _edges.find(&e);
+    if (iter != _edges.end())
+    {
+        _edges.erase(iter);
+        return true;
+    }
+    return false;
+}
+
+const std::set<Vertex*>& Graph::getVertices()
+{
+    return _vertices;
+}
+
+const std::set<Edge*>& Graph::getEdges()
+{
+    return _edges;
+}
+
+Environment& Graph::getEnv() const
+{
+    return _env;
 }

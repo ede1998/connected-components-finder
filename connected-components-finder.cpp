@@ -1,8 +1,8 @@
 #include <iostream>
+
 #include "Graph.hpp"
-#include <set>
-#include <algorithm>
-#include <cassert>
+#include "GraphAlgorithms.hpp"
+#include "Environment.hpp"
 
 void printStats(const Environment& env)
 {
@@ -33,45 +33,12 @@ int main(int argc, char **argv)
         return 0;
     }
     Environment env = Environment(argv[1]);
-    std::set<Vertex*> connectedVertices, remainingVertices;
-    std::set<Edge*> connectedEdges;
 
     printStats(env);
 
-    // Initialize buffers
-    connectedVertices.insert(&env.getVertex(0));
-    remainingVertices.insert(&env.getVertex(0));
+    Graph g = generateConnectedComponents(env.getVertex(0));
 
-    // main loop
-    while (!remainingVertices.empty())
-    {
-        Vertex* v = *remainingVertices.begin();
-        remainingVertices.erase(remainingVertices.begin());
-
-        // find all neighbours that are not in R
-        std::set<Vertex*> remNeighbourhood;
-        auto neighbourhood = v->getNeighbourhood();
-        std::set_difference(neighbourhood.begin(),
-                            neighbourhood.end(),
-                            connectedVertices.begin(),
-                            connectedVertices.end(),
-                            std::inserter(remNeighbourhood,
-                                          remNeighbourhood.begin()));
-
-        // loop over them
-        while (!remNeighbourhood.empty())
-        {
-            Vertex* w = *remNeighbourhood.begin();
-            remNeighbourhood.erase(remNeighbourhood.begin());
-
-            connectedVertices.insert(w);
-            remainingVertices.insert(w);
-            connectedEdges.insert(v->getIncidentEdge(*w));
-        }
-    }
-
-
-    printContainer(connectedVertices.begin(), connectedVertices.end(), ' ');
+    printContainer(g.getVertices().cbegin(), g.getVertices().cend(), ' ');
     std::cout << std::endl;
 
     return 0;
