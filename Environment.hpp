@@ -22,6 +22,8 @@ class Environment
 {
 public:
     Environment();
+    Environment(const Environment&) = delete;
+    Environment& operator=(const Environment&) = delete;
     Environment(const char* file);
     Edge& addEdge(Vertex& v1, Vertex& v2);
     Vertex& addVertex();

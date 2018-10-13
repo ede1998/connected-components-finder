@@ -10,6 +10,6 @@ add_library(wochnik-graph STATIC CombOptWS2018/graph.cpp)
 
 add_library(graph STATIC Graph.cpp Environment.cpp Vertex.cpp Edge.cpp GraphAlgorithms.cpp)
 
-add_executable(connected-components-finder connected-components-finder.cpp)
+add_executable(connected-components-finder main.cpp)
 
 target_link_libraries(connected-components-finder graph)

@@ -11,7 +11,7 @@
 #include <set>
 #include <algorithm>
 
-Graph generateConnectedComponents(const Vertex& v)
+Graph generateConnectedComponents(const Vertex& v, const Direction d)
 {
     std::set<const Vertex*> connectedVertices, remainingVertices;
     std::set<const Edge*> connectedEdges;
@@ -29,7 +29,7 @@ Graph generateConnectedComponents(const Vertex& v)
 
         // find all neighbours that are not in already connected
         std::set<Vertex*> remNeighbourhood;
-        auto neighbourhood = v->getNeighbourhood();
+        auto neighbourhood = v->getNeighbourhood(d);
         std::set_difference(neighbourhood.begin(),
                             neighbourhood.end(),
                             connectedVertices.begin(),
@@ -46,7 +46,7 @@ Graph generateConnectedComponents(const Vertex& v)
             connectedVertices.insert(w);
             remainingVertices.insert(w);
 
-            const Edge* e = v->getIncidentEdge(*w);
+            const Edge* e = v->getIncidentEdge(*w, d);
             assert(e);
             connectedEdges.insert(e);
         }
@@ -88,4 +88,9 @@ std::vector<Graph> findAllConnectedComponents(const Environment& env)
     }
 
     return result;
+}
+
+Graph findAllStronglyConnectedComponents(const Environment& env)
+{
+
 }

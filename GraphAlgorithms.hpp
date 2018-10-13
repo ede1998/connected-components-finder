@@ -14,8 +14,10 @@
 #include "Environment.hpp"
 #include "Graph.hpp"
 #include "Vertex.hpp"
+#include "Direction.hpp"
 
-Graph generateConnectedComponents(const Vertex& v);
+Graph generateConnectedComponents(const Vertex& v, const Direction d = DIR_BOTH);
 std::vector<Graph> findAllConnectedComponents(const Environment& env);
+Graph findAllStronglyConnectedComponents(const Environment& env);
 
 #endif /* GRAPHALGORITHMS_HPP_ */
