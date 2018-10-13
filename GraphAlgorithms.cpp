@@ -7,6 +7,7 @@
 
 #include "GraphAlgorithms.hpp"
 
+#include <cassert>
 #include <set>
 #include <algorithm>
 
@@ -44,7 +45,10 @@ Graph generateConnectedComponents(const Vertex& v)
 
             connectedVertices.insert(w);
             remainingVertices.insert(w);
-            connectedEdges.insert(v->getIncidentEdge(*w));
+
+            const Edge* e = v->getIncidentEdge(*w);
+            assert(e);
+            connectedEdges.insert(e);
         }
     }
 
