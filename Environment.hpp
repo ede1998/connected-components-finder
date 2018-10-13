@@ -9,6 +9,7 @@
 #define ENVIRONMENT_HPP_
 
 #include <forward_list>
+#include <set>
 
 using eID = unsigned int;
 using vID = unsigned int;
@@ -30,6 +31,9 @@ public:
 
     Vertex& getVertex(size_t index);
     Edge& getEdge(size_t index);
+
+    std::set<const Vertex*> getAllVertices() const;
+    std::set<const Edge*> getAllEdges() const;
 private:
     std::forward_list<Vertex> _vertices;
     std::forward_list<Edge> _edges;

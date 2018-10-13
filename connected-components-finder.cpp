@@ -1,8 +1,10 @@
 #include <iostream>
+#include <vector>
 
 #include "Graph.hpp"
 #include "GraphAlgorithms.hpp"
 #include "Environment.hpp"
+#include "Timer.hpp"
 
 void printStats(const Environment& env)
 {
@@ -26,6 +28,7 @@ void printContainer(Iterator first, Iterator last, char delim)
 
 int main(int argc, char **argv)
 {
+    Timer tmr;
     if (argc != 2)
     {
         std::cout << "Program needs a file with graph to operate on."
@@ -34,12 +37,24 @@ int main(int argc, char **argv)
     }
     Environment env = Environment(argv[1]);
 
+    std::cout << "Elapsed time: " << tmr.elapsed() << "s" << std::endl;
+
     printStats(env);
 
-    Graph g = generateConnectedComponents(env.getVertex(0));
+    tmr.reset();
 
-    printContainer(g.getVertices().cbegin(), g.getVertices().cend(), ' ');
-    std::cout << std::endl;
+    std::vector<Graph> conGraphs = findAllConnectedComponents(env);
+
+    std::cout << "Elapsed time: " << tmr.elapsed() << "s" << std::endl;
+    tmr.reset();
+
+    for (const Graph& g: conGraphs)
+    {
+        printContainer(g.getVertices().cbegin(), g.getVertices().cend(), ' ');
+        std::cout << std::endl;
+    }
+
+    std::cout << "Elapsed time: " << tmr.elapsed() << "s" << std::endl;
 
     return 0;
 }

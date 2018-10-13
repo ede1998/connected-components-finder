@@ -10,8 +10,6 @@
 #include <set>
 #include <algorithm>
 
-#include "Environment.hpp"
-
 Graph generateConnectedComponents(const Vertex& v)
 {
     std::set<const Vertex*> connectedVertices, remainingVertices;
@@ -28,7 +26,7 @@ Graph generateConnectedComponents(const Vertex& v)
         const Vertex* v = *remainingVertices.begin();
         remainingVertices.erase(remainingVertices.begin());
 
-        // find all neighbours that are not in R
+        // find all neighbours that are not in already connected
         std::set<Vertex*> remNeighbourhood;
         auto neighbourhood = v->getNeighbourhood();
         std::set_difference(neighbourhood.begin(),
@@ -62,4 +60,28 @@ Graph generateConnectedComponents(const Vertex& v)
     }
 
     return g;
+}
+
+std::vector<Graph> findAllConnectedComponents(const Environment& env)
+{
+    std::vector<Graph> result;
+    std::set<const Vertex*> unvisitedVertices = env.getAllVertices();
+
+    while (!unvisitedVertices.empty())
+    {
+        const Vertex* v = *unvisitedVertices.begin();
+
+        result.emplace_back(generateConnectedComponents(*v));
+
+        const std::set<Vertex*>& currentVertices = result.back().getVertices();
+
+        // remove connected vertices from unvisitedVertices
+        std::set<const Vertex*> tmp;
+        auto beg = std::make_move_iterator(unvisitedVertices.begin());
+        auto end = std::make_move_iterator(unvisitedVertices.end());
+        std::set_difference(beg, end, currentVertices.begin(), currentVertices.end(), std::inserter(tmp, tmp.begin()));
+        unvisitedVertices.swap(tmp);
+    }
+
+    return result;
 }

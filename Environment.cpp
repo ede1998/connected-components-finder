@@ -31,7 +31,8 @@ Environment::Environment(const char* filename) :
     fs >> numVertices;
 
     // Add vertices and save temporarily
-    std::vector<Vertex*> buffer(numVertices);
+    std::vector<Vertex*> buffer;
+    buffer.reserve(numVertices);
     for (vID i = 0; i < numVertices; ++i)
     {
         buffer.push_back(&addVertex());
@@ -81,11 +82,35 @@ unsigned int Environment::getVertexSize() const
 Vertex& Environment::getVertex(size_t index)
 {
     auto selectID = [index](const Vertex& v) {   return v.getID() == index;};
-    return *std::find_if(_vertices.begin(), _vertices.end(), selectID);
+    auto iter = std::find_if(_vertices.begin(), _vertices.end(), selectID);
+    assert(iter != _vertices.end());
+    return *iter;
 }
 
 Edge& Environment::getEdge(size_t index)
 {
     auto selectID = [index](const Edge& v) {   return v.getID() == index;};
-    return *std::find_if(_edges.begin(), _edges.end(), selectID);
+    auto iter = std::find_if(_edges.begin(), _edges.end(), selectID);
+    assert(iter != _edges.end());
+    return *iter;
+}
+
+std::set<const Vertex*> Environment::getAllVertices() const
+{
+    std::set<const Vertex*> s;
+    for (const Vertex& v: _vertices)
+    {
+        s.insert(&v);
+    }
+    return s;
+}
+
+std::set<const Edge*> Environment::getAllEdges() const
+{
+    std::set<const Edge*> s;
+    for (const Edge& e: _edges)
+    {
+        s.insert(&e);
+    }
+    return s;
 }

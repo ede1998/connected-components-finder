@@ -24,8 +24,8 @@ public:
     bool addEdge(Edge& e);
     bool removeVertex(Vertex& v);
     bool removeEdge(Edge& e);
-    const std::set<Vertex*>& getVertices();
-    const std::set<Edge*>& getEdges();
+    const std::set<Vertex*>& getVertices() const;
+    const std::set<Edge*>& getEdges() const;
     Environment& getEnv() const;
 private:
     std::set<Vertex*> _vertices;

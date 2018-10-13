@@ -44,12 +44,12 @@ bool Graph::removeEdge(Edge& e)
     return false;
 }
 
-const std::set<Vertex*>& Graph::getVertices()
+const std::set<Vertex*>& Graph::getVertices() const
 {
     return _vertices;
 }
 
-const std::set<Edge*>& Graph::getEdges()
+const std::set<Edge*>& Graph::getEdges() const
 {
     return _edges;
 }
