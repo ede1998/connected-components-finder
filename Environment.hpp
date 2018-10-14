@@ -36,6 +36,8 @@ public:
 
     std::set<const Vertex*> getAllVertices() const;
     std::set<const Edge*> getAllEdges() const;
+
+    void printStats();
 private:
     std::forward_list<Vertex> _vertices;
     std::forward_list<Edge> _edges;

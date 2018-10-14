@@ -18,6 +18,6 @@
 
 Graph generateConnectedComponents(const Vertex& v, const Direction d = DIR_BOTH);
 std::vector<Graph> findAllConnectedComponents(const Environment& env);
-Graph findAllStronglyConnectedComponents(const Environment& env);
+std::vector<Graph> findAllStronglyConnectedComponents(const Environment& env);
 
 #endif /* GRAPHALGORITHMS_HPP_ */

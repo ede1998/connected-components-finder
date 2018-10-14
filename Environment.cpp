@@ -7,10 +7,11 @@
 
 #include "Environment.hpp"
 
-#include <fstream>
-#include <cassert>
-#include <vector>
 #include <algorithm>
+#include <cassert>
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 #include "Edge.hpp"
 #include "Vertex.hpp"
@@ -52,7 +53,7 @@ Edge& Environment::addEdge(Vertex& v1, Vertex& v2)
     assert(std::find(_vertices.begin(), _vertices.end(), v2)
             != _vertices.end());
 
-    _edges.push_front(Edge(_edgesSize, v1, v2, *this));
+    _edges.push_front(std::move(Edge(_edgesSize, v1, v2, *this)));
     ++_edgesSize;
 
     Edge& e = _edges.front();
@@ -64,7 +65,7 @@ Edge& Environment::addEdge(Vertex& v1, Vertex& v2)
 
 Vertex& Environment::addVertex()
 {
-    _vertices.push_front(Vertex(_verticesSize, *this));
+    _vertices.push_front(std::move(Vertex(_verticesSize, *this)));
     ++_verticesSize;
     return _vertices.front();
 }
@@ -113,4 +114,10 @@ std::set<const Edge*> Environment::getAllEdges() const
         s.insert(&e);
     }
     return s;
+}
+
+void Environment::printStats()
+{
+    std::cout << "Number of vertices: " << getVertexSize() << std::endl;
+    std::cout << "Number of edges: " << getEdgeSize() << std::endl;
 }

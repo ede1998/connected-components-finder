@@ -20,16 +20,18 @@ class Graph
     friend class Environment;
 public:
     Graph(Environment& env);
-    bool addVertex(Vertex& v);
-    bool addEdge(Edge& e);
-    bool removeVertex(Vertex& v);
-    bool removeEdge(Edge& e);
-    const std::set<Vertex*>& getVertices() const;
-    const std::set<Edge*>& getEdges() const;
+    bool addVertex(const Vertex& v);
+    bool addEdge(const Edge& e);
+    bool removeVertex(const Vertex& v);
+    bool removeEdge(const Edge& e);
+    const std::set<const Vertex*>& getVertices() const;
+    const std::set<const Edge*>& getEdges() const;
     Environment& getEnv() const;
+    void printNodes() const;
+    void printEdges() const;
 private:
-    std::set<Vertex*> _vertices;
-    std::set<Edge*> _edges;
+    std::set<const Vertex*> _vertices;
+    std::set<const Edge*> _edges;
     Environment& _env;
 };
 
