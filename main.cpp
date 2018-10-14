@@ -33,7 +33,7 @@ void getAllConnectedComponents(const Environment& env)
 
     std::vector<Graph> conGraphs = findAllConnectedComponents(env);
 
-    std::cout << "Elapsed time (findAllConnectedComponents): " << tmr.elapsed() << "s" << std::endl;
+    std::cerr << "Elapsed time (findAllConnectedComponents): " << tmr.elapsed() << "s" << std::endl;
 
     tmr.reset();
 
@@ -43,18 +43,20 @@ void getAllConnectedComponents(const Environment& env)
         std::cout << std::endl;
     }
 
-    std::cout << "Elapsed time (printing): " << tmr.elapsed() << "s" << std::endl;
+    std::cerr << "Elapsed time (printing): " << tmr.elapsed() << "s" << std::endl;
 }
 
 enum Operation
 {
     OP_CONNECTEDCOMPONENTS,
+    OP_STRONGLYCONNECTEDCOMPONENTS,
     OP_NOP
 };
 
 Operation selectOperation(const char* str)
 {
-    if (!strcmp(str, "concomp")) return OP_CONNECTEDCOMPONENTS;
+    if (!strcmp(str, "concomp"))    return OP_CONNECTEDCOMPONENTS;
+    if (!strcmp(str, "strconcomp")) return OP_STRONGLYCONNECTEDCOMPONENTS;
     return OP_NOP;
 }
 
@@ -69,7 +71,7 @@ int main(int argc, char **argv)
     }
     Environment env = Environment(argv[2]);
 
-    std::cout << "Elapsed time (load env): " << tmr.elapsed() << "s" << std::endl;
+    std::cerr << "Elapsed time (load env): " << tmr.elapsed() << "s" << std::endl;
 
     printStats(env);
 
@@ -77,6 +79,8 @@ int main(int argc, char **argv)
     {
         case OP_CONNECTEDCOMPONENTS:
            getAllConnectedComponents(env);
+        break;
+        case OP_STRONGLYCONNECTEDCOMPONENTS:
         break;
     }
 
