@@ -25,7 +25,9 @@ public:
     bool removeVertex(const Vertex& v);
     bool removeEdge(const Edge& e);
     const std::set<const Vertex*>& getVertices() const;
+    std::set<const Vertex*>& getVertices();
     const std::set<const Edge*>& getEdges() const;
+    std::set<const Edge*>& getEdges();
     Environment& getEnv() const;
     void printNodes() const;
     void printEdges() const;

@@ -169,3 +169,51 @@ std::vector<Graph> findAllStronglyConnectedComponents(const Environment& env)
     return components;
 
 }
+
+std::vector<Graph> findAllStronglyConnectedComponentsFast(const Environment& env)
+{
+    std::vector<Graph> result;
+    std::set<const Vertex*> unvisitedVertices(std::move(env.getAllVertices()));
+
+    while (!unvisitedVertices.empty())
+    {
+        const Vertex* v = *unvisitedVertices.begin();
+
+        // find all w-v-paths
+        std::set<const Vertex*> incoming(
+                std::move(generateConnectedComponents(*v, DIR_INCOMING).getVertices()));
+        // find all v-w-paths
+        std::set<const Vertex*> outgoing(
+                std::move(generateConnectedComponents(*v, DIR_OUTGOING).getVertices()));
+
+        // find all vertices w with v-w-path and w-v-path by intersection
+        // of the two sets => strongly connected
+        result.emplace_back(const_cast<Environment&>(env));
+        std::set<const Vertex*>& currentComponent = result.back().getVertices();
+        {
+            auto beg = std::make_move_iterator(incoming.begin());
+            auto end = std::make_move_iterator(incoming.end());
+            std::set_intersection(beg,
+                                  end,
+                                  outgoing.begin(),
+                                  outgoing.end(),
+                                  std::inserter(currentComponent,
+                                                currentComponent.begin()));
+        }
+
+        // remove connected vertices from unvisitedVertices
+        {
+            std::set<const Vertex*> tmp;
+            auto beg = std::make_move_iterator(unvisitedVertices.begin());
+            auto end = std::make_move_iterator(unvisitedVertices.end());
+            std::set_difference(beg,
+                                end,
+                                currentComponent.begin(),
+                                currentComponent.end(),
+                                std::inserter(tmp, tmp.begin()));
+            unvisitedVertices.swap(tmp);
+        }
+    }
+
+    return result;
+}

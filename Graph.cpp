@@ -95,3 +95,13 @@ void Graph::printEdges() const
             };
     std::for_each(_edges.cbegin(), _edges.cend(), printer);
 }
+
+std::set<const Vertex*>& Graph::getVertices()
+{
+    return _vertices;
+}
+
+std::set<const Edge*>& Graph::getEdges()
+{
+    return _edges;
+}

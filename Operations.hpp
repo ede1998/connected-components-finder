@@ -17,7 +17,10 @@ class Graph;
 
 enum Operation
 {
-    OP_CONNECTEDCOMPONENTS, OP_STRONGLYCONNECTEDCOMPONENTS, OP_SIZE
+    OP_CONNECTEDCOMPONENTS,
+    OP_STRONGLYCONNECTEDCOMPONENTS,
+    OP_STRONGLYCONNECTEDCOMPONENTSFAST,
+    OP_SIZE
 };
 
 using GraphAlgorithm = std::vector<Graph> (*)(const Environment&);
@@ -26,9 +29,10 @@ struct {
     const char* const name;
     GraphAlgorithm function;
 }
-  operations[OP_SIZE] = {
+const operations[OP_SIZE] = {
         [OP_CONNECTEDCOMPONENTS] = { "concomp", findAllConnectedComponents },
         [OP_STRONGLYCONNECTEDCOMPONENTS] = { "strconcomp", findAllStronglyConnectedComponents },
+        [OP_STRONGLYCONNECTEDCOMPONENTSFAST] = { "strconcompfast", findAllStronglyConnectedComponentsFast }
 };
 
 
