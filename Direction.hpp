@@ -12,7 +12,7 @@ enum Direction
 {
     DIR_INCOMING,
     DIR_OUTGOING,
-    DIR_BOTH
+    DIR_UNDIRECTED
 };
 
 #endif /* _VERTEX_HPP_ */

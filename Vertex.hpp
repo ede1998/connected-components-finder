@@ -22,10 +22,10 @@ class Vertex
 {
     friend class Environment;
 public:
-   std::set<Edge*> getIncidentEdges(const Direction d = DIR_BOTH) const;
-   unsigned int getDegree(const Direction d = DIR_BOTH);
-   std::set<Vertex*> getNeighbourhood(const Direction d = DIR_BOTH) const;
-   Edge* getIncidentEdge(const Vertex& other, const Direction d = DIR_BOTH) const;
+   std::set<Edge*> getIncidentEdges(const Direction d = DIR_UNDIRECTED) const;
+   unsigned int getDegree(const Direction d = DIR_UNDIRECTED);
+   std::set<Vertex*> getNeighbourhood(const Direction d = DIR_UNDIRECTED) const;
+   Edge* getIncidentEdge(const Vertex& other, const Direction d = DIR_UNDIRECTED) const;
    vID getID() const;
    Environment& getEnv() const;
 private:

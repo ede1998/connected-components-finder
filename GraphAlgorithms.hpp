@@ -16,7 +16,7 @@
 #include "Vertex.hpp"
 #include "Direction.hpp"
 
-Graph generateConnectedComponents(const Vertex& v, const Direction d = DIR_BOTH);
+Graph generateConnectedComponents(const Vertex& v, const Direction d = DIR_UNDIRECTED);
 std::vector<Graph> findAllConnectedComponents(const Environment& env);
 std::vector<Graph> findAllStronglyConnectedComponents(const Environment& env);
 

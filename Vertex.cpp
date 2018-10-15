@@ -21,7 +21,7 @@ std::set<Edge*> Vertex::getIncidentEdges(const Direction d) const
     std::set<Edge*> result;
     switch (d)
     {
-        case DIR_BOTH:
+        case DIR_UNDIRECTED:
             return _edges;
         case DIR_INCOMING:
             for (Edge* e : _edges)
@@ -51,7 +51,7 @@ unsigned int Vertex::getDegree(const Direction d)
 
     switch (d)
     {
-        case DIR_BOTH:
+        case DIR_UNDIRECTED:
             return _edges.size();
         case DIR_INCOMING:
             return std::count_if(_edges.begin(), _edges.end(), incCounter);
@@ -69,7 +69,7 @@ std::set<Vertex*> Vertex::getNeighbourhood(const Direction d) const
         Vertex& v = e->getAdjacentVertex(*this);
         switch (d)
         {
-            case DIR_BOTH:
+            case DIR_UNDIRECTED:
                 nbh.insert(&v);
                 break;
             case DIR_INCOMING:
@@ -102,7 +102,7 @@ Edge* Vertex::getIncidentEdge(const Vertex& other, const Direction d) const
         {
             switch (d)
             {
-                case DIR_BOTH:
+                case DIR_UNDIRECTED:
                     return e;
                 case DIR_OUTGOING:
                     if (e->getFirst() == *this)
