@@ -10,22 +10,24 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <queue>
 #include <set>
 
 Graph generateConnectedComponents(const Vertex& v, const Direction d)
 {
-    std::set<const Vertex*> connectedVertices, remainingVertices;
+    std::set<const Vertex*> connectedVertices;
+    std::queue<const Vertex*> remainingVertices;
     std::set<const Edge*> connectedEdges;
 
     // Initialize buffers
-    connectedVertices.insert(&v);
-    remainingVertices.insert(&v);
+    connectedVertices.emplace(&v);
+    remainingVertices.emplace(&v);
 
     // main loop
     while (!remainingVertices.empty())
     {
-        const Vertex* v = *remainingVertices.begin();
-        remainingVertices.erase(remainingVertices.begin());
+        const Vertex* v = remainingVertices.front();
+        remainingVertices.pop();
 
         // find all neighbors that are not in already connected
         std::set<Vertex*> remNeighbourhood;
@@ -44,7 +46,7 @@ Graph generateConnectedComponents(const Vertex& v, const Direction d)
             remNeighbourhood.erase(remNeighbourhood.begin());
 
             connectedVertices.insert(w);
-            remainingVertices.insert(w);
+            remainingVertices.push(w);
 
             const Edge* e = v->getIncidentEdge(*w, d);
             assert(e);
