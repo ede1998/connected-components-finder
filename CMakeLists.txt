@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(CombOptWS2018)
 
-add_library(wochnik-graph STATIC CombOptWS2018/graph.cpp)
+#add_library(wochnik-graph STATIC CombOptWS2018/graph.cpp)
 
 add_library(graph STATIC Graph.cpp Environment.cpp Vertex.cpp Edge.cpp GraphAlgorithms.cpp)
 
